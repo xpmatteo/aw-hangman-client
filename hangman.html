@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8"/>
+    <title>Hangman</title>
+  </head>
+  <body>
+
+    <div id='authentication'>
+      <form id="make-new-user">
+        <p>
+          Name:<br/>
+          <input type='text' name='name' />
+        </p>
+        <p>
+          Password:<br/>
+          <input type='text' name='password' />
+        </p>
+        <input type='submit' name='Create user' />
+      </form>
+      <div id="current-user">
+        <p><img src='images/spinner.gif' alt='' /></p>
+        <p id='user-name'></p>
+      </div>
+    </div>
+
+    <hr/>
+
+    <div id="current-game">
+      <p>
+        <button id="new-game">New Game!</button>
+      </p>
+      <p>Prisoner: <span id="prisoner"></span></p>
+      <p>Remaining: <span id="remaining"></span></p>
+      <p>Status: <span id="status"></span></p>
+      <p>Hits: <span id="hits"></span></p>
+      <p>Misses: <span id="misses"></span></p>
+    </div>
+    <form>
+      <input type="text" name="guess" value="" id="guess"/>
+      <div>
+        <button id="btn_a" class="btn" value="0" disabled="disabled">a</button>
+        <button id="btn_b" class="btn" value="1" disabled="disabled">b</button>
+        <button id="btn_c" class="btn" value="2" disabled="disabled">c</button>
+        <button id="btn_d" class="btn" value="d" disabled="disabled">d</button>
+        <button id="btn_e" class="btn" value="e" disabled="disabled">e</button>
+        <button id="btn_f" class="btn" value="f" disabled="disabled">f</button>
+        <button id="btn_g" class="btn" value="g" disabled="disabled">g</button>
+        <button id="btn_h" class="btn" value="h" disabled="disabled">h</button>
+        <button id="btn_i" class="btn" value="i" disabled="disabled">i</button>
+        <button id="btn_j" class="btn" value="j" disabled="disabled">j</button>
+        <button id="btn_k" class="btn" value="k" disabled="disabled">k</button>
+        <button id="btn_l" class="btn" value="l" disabled="disabled">l</button>
+        <button id="btn_m" class="btn" value="m" disabled="disabled">m</button>
+        <button id="btn_n" class="btn" value="n" disabled="disabled">n</button>
+        <button id="btn_o" class="btn" value="o" disabled="disabled">o</button>
+        <button id="btn_p" class="btn" value="p" disabled="disabled">p</button>
+        <button id="btn_q" class="btn" value="q" disabled="disabled">q</button>
+        <button id="btn_r" class="btn" value="r" disabled="disabled">r</button>
+        <button id="btn_s" class="btn" value="s" disabled="disabled">s</button>
+        <button id="btn_t" class="btn" value="t" disabled="disabled">t</button>
+        <button id="btn_u" class="btn" value="u" disabled="disabled">u</button>
+        <button id="btn_v" class="btn" value="v" disabled="disabled">v</button>
+        <button id="btn_w" class="btn" value="w" disabled="disabled">w</button>
+        <button id="btn_x" class="btn" value="x" disabled="disabled">x</button>
+        <button id="btn_y" class="btn" value="y" disabled="disabled">y</button>
+        <button id="btn_z" class="btn" value="z" disabled="disabled">x</button>
+      </div>
+    </form>
+    <script src="scripts/lib/jquery.min.js"></script>
+    <script>
+    </script>
+  </body>
+</html>
