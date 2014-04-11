@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8"/>
+    <title>Hangman</title>
+  </head>
+  <body>
+
+    <pre id='output'></pre>
+
+    <div id='authentication'>
+      <form id="make-new-user">
+        <p>
+          Name:<br/>
+          <input type='text' name='name' />
+        </p>
+        <p>
+          Password:<br/>
+          <input type='text' name='password' />
+        </p>
+        <input type='submit' value='Create User' />
+        <img class='spinner' src='images/spinner.gif' alt='' />
+      </form>
+      <div id="current-user">
+        <p id='user-name'></p>
+      </div>
+    </div>
+
+    <hr/>
+
+    <p>
+      <button id="make-new-game" disabled="disabled">New Game!</button>
+      <img class='spinner' src='images/spinner.gif' alt='' />
+    </p>
+    <div id="current-game">
+      <p>Prisoner: <span id="prisoner"></span> <img class='spinner' src='images/spinner.gif' alt='' /></p>
+      <p>Remaining: <span id="remaining"></span></p>
+      <p>Status: <span id="status"></span></p>
+      <p>Hits: <span id="hits"></span></p>
+      <p>Misses: <span id="misses"></span></p>
+    </div>
+    <form id='guess'>
+      <button id="btn_a" class="btn" name='guess' value="a" disabled="disabled">a</button>
+      <button id="btn_b" class="btn" name='guess' value="b" disabled="disabled">b</button>
+      <button id="btn_c" class="btn" name='guess' value="c" disabled="disabled">c</button>
+      <button id="btn_d" class="btn" name='guess' value="d" disabled="disabled">d</button>
+      <button id="btn_e" class="btn" name='guess' value="e" disabled="disabled">e</button>
+      <button id="btn_f" class="btn" name='guess' value="f" disabled="disabled">f</button>
+      <button id="btn_g" class="btn" name='guess' value="g" disabled="disabled">g</button>
+      <button id="btn_h" class="btn" name='guess' value="h" disabled="disabled">h</button>
+      <button id="btn_i" class="btn" name='guess' value="i" disabled="disabled">i</button>
+      <button id="btn_j" class="btn" name='guess' value="j" disabled="disabled">j</button>
+      <button id="btn_k" class="btn" name='guess' value="k" disabled="disabled">k</button>
+      <button id="btn_l" class="btn" name='guess' value="l" disabled="disabled">l</button>
+      <button id="btn_m" class="btn" name='guess' value="m" disabled="disabled">m</button>
+      <button id="btn_n" class="btn" name='guess' value="n" disabled="disabled">n</button>
+      <button id="btn_o" class="btn" name='guess' value="o" disabled="disabled">o</button>
+      <button id="btn_p" class="btn" name='guess' value="p" disabled="disabled">p</button>
+      <button id="btn_q" class="btn" name='guess' value="q" disabled="disabled">q</button>
+      <button id="btn_r" class="btn" name='guess' value="r" disabled="disabled">r</button>
+      <button id="btn_s" class="btn" name='guess' value="s" disabled="disabled">s</button>
+      <button id="btn_t" class="btn" name='guess' value="t" disabled="disabled">t</button>
+      <button id="btn_u" class="btn" name='guess' value="u" disabled="disabled">u</button>
+      <button id="btn_v" class="btn" name='guess' value="v" disabled="disabled">v</button>
+      <button id="btn_w" class="btn" name='guess' value="w" disabled="disabled">w</button>
+      <button id="btn_x" class="btn" name='guess' value="x" disabled="disabled">x</button>
+      <button id="btn_y" class="btn" name='guess' value="y" disabled="disabled">y</button>
+      <button id="btn_z" class="btn" name='guess' value="z" disabled="disabled">x</button>
+    </form>
+    <script src="scripts/lib/jquery.min.js"></script>
+    <script>
+      $(function() {
+        $('.spinner').hide()
+
+        var current_user_url;
+        var current_user_password;
+        var current_game_url;
+
+        function stringify(x) { return JSON.stringify(x, null, 2) }
+
+        function format() {
+          var result = arguments[0];
+          for (var i=1; i<arguments.length; i++) {
+            var regexp = new RegExp("\\{" + i + "\\}", "g")
+            result = result.replace(regexp, arguments[i])
+          }
+          return result;
+        }
+
+        function log() {
+          var message = format.apply(this, arguments)
+          $('#output').html(message)
+        }
+
+        function on_user_created(data) {
+          current_user_url = data.location
+
+          $('#make-new-user .spinner').hide()
+          $('#make-new-game').removeAttr('disabled')
+          log('User created: <a href="{1}{2}?password={3}">{2}</a>',
+              'http://aw-hangman.herokuapp.com',
+              current_user_url,
+              current_user_password)
+          $("#make-new-user").hide(700)
+        }
+
+        function on_failure(data, x) {
+          $('#output').text('ERROR\n' + x + '\n' + stringify(data));
+        }
+
+        function on_make_new_user() {
+          $('#make-new-user .spinner').show();
+          current_user_password = $("input[name=password]").val()
+          $.ajax({
+            url: 'http://aw-hangman.herokuapp.com/users',
+            method: "POST",
+            success: on_user_created,
+            error: on_failure,
+            data: {
+              name: $("input[name=name]").val(),
+              password: current_user_password,
+            },
+          })
+          return false;
+        }
+
+        function on_make_new_game() {
+          $('#make-new-game ~ .spinner').show();
+          $.ajax({
+            url: 'http://aw-hangman.herokuapp.com' + current_user_url + "/prisoners",
+            method: "POST",
+            success: on_new_game_created,
+            error: on_failure,
+            data: {
+              password: current_user_password,
+            },
+          })
+        }
+
+        function on_new_game_created(data) {
+          current_game_url = data.location
+          log('Game created: <a href="{1}{2}?password={3}">{2}</a>',
+              'http://aw-hangman.herokuapp.com',
+              current_game_url,
+              current_user_password)
+          $('#guess button').removeAttr('disabled')
+          refresh_current_game()
+        }
+
+        function refresh_current_game() {
+            $.ajax({
+              url: 'http://aw-hangman.herokuapp.com' + current_game_url,
+              method: "GET",
+              success: function(data) {
+                $('.spinner').hide()
+                $("#prisoner").text(data.prisoner.word)
+                $("#status").text(data.prisoner.state)
+                $("#remaining").text(data.prisoner.guesses_remaining)
+                $("#hits").text(JSON.stringify(data.prisoner.hits))
+                $("#misses").text(JSON.stringify(data.prisoner.misses))
+              },
+              error: on_failure,
+              data: {
+                password: current_user_password,
+              },
+            })
+        }
+
+        function on_guess(event) {
+          $("#current-game .spinner").show()
+          $.ajax({
+            url: 'http://aw-hangman.herokuapp.com' + current_game_url,
+            method: "POST",
+            success: refresh_current_game,
+            error: on_failure,
+            data: {
+              password: current_user_password,
+              guess: event.currentTarget.value,
+            },
+          })
+          $(event.currentTarget).attr("disabled", "disabled")
+          return false;
+        }
+
+        $('#make-new-user').submit(on_make_new_user)
+        $('#make-new-game').click(on_make_new_game)
+        $('#guess .btn').click(on_guess)
+      })
+    </script>
+  </body>
+</html>
