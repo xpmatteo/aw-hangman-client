@@ -5,9 +5,7 @@
     <title>Hangman</title>
   </head>
   <body>
-
     <pre id='output'></pre>
-
     <div id='authentication'>
       <form id="make-new-user">
         <p>
@@ -21,14 +19,14 @@
         <input type='submit' value='Create User' />
       </form>
       <div id="current-user">
-        <p><img src='images/spinner.gif' alt='' /></p>
+        <p><img id='spinner' src='images/spinner.gif' alt=''  style="display: none" /></p>
         <p id='user-name'></p>
       </div>
     </div>
 
     <hr/>
 
-    <div id="current-game">
+    <div id="current-game"  style="display: none">
       <p>
         <button id="new-game">New Game!</button>
       </p>
@@ -38,9 +36,10 @@
       <p>Hits: <span id="hits"></span></p>
       <p>Misses: <span id="misses"></span></p>
     </div>
-    <form>
+    <form id="guess-form" style="display: none">
       <input type="text" name="guess" value="" id="guess"/>
-      <div>
+      <input type="submit" value="Guess?" />
+      <div id='buttons' style="display: none">
         <button id="btn_a" class="btn" value="0" disabled="disabled">a</button>
         <button id="btn_b" class="btn" value="1" disabled="disabled">b</button>
         <button id="btn_c" class="btn" value="2" disabled="disabled">c</button>
@@ -69,10 +68,12 @@
         <button id="btn_z" class="btn" value="z" disabled="disabled">x</button>
       </div>
     </form>
-    <script src="scripts/lib/jquery.min.js"></script>
-    <script>
-    $(document).ready(function () {
-      // do something with jQuery to hide the img ...
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+    
+    <script>    
+    $(document).ready(function() {
+      console.log("Apri la console JavaScript per vedere questo messaggio!")
     })
     </script>
   </body>
